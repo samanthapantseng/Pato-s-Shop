@@ -7,7 +7,7 @@ class Moco {
   public Moco() {    
     pos = new PVector(width/2, height/2);    
     vel = new PVector(random(-5,5), random(-5,5));   
-    clr = color(random(50,200), random(80,100), random(60,80));
+    clr = color(random(0,100), random(80,100), random(60,80));
   }
 
   void dibujar() {
