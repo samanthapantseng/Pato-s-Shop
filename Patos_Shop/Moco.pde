@@ -13,7 +13,7 @@ class Moco {
   void dibujar() {
     noStroke();
     fill(clr);
-    square(pos.x, pos.y, width/312);
+    square(pos.x, pos.y, width/624);
   }
   
   void mover() {

@@ -12,6 +12,15 @@ Pato pato;
 long instante, instanteRestart;
 int n, espera, esperaRestart, escenario;
 
+//nivel
+int nivel;
+boolean cambioNivel;
+
+//enemigos
+ArrayList<Blopi> blopis;
+long instanteBlopi;
+int intervaloBlopi;
+
 void setup() {
   fullScreen();  
   colorMode(HSB, 360, 100, 100);
@@ -36,6 +45,8 @@ void setup() {
   
   pato = new Pato();
   
+  blopis = new ArrayList<Blopi>();
+  
   escenario = 1;
   esperaRestart = 8000;
 }
@@ -57,7 +68,7 @@ void escenario1() {
 }
 
 void escenario2() {  
-  if (millis() - instante > espera && n<100) {
+  if (millis() - instante > espera && n<150) {
     Moco nuevo = new Moco();
     mocos.add(nuevo);
     n ++;
@@ -70,6 +81,35 @@ void escenario2() {
   }  
   
   pato.dibujar();
+  
+  //blopis
+  if (nivel < 6) {
+    for (int x=0; x < blopis.size(); x++) {
+      Blopi aux = blopis.get(x);
+      aux.mover();
+      aux.dibujar();
+      
+      if (pato.getPos().dist(aux.getPos()) < 30) {
+        // expl
+        if (blopis.size() > 0)
+          blopis.remove(x);      
+      }    
+    }
+  
+    if (millis() - instanteBlopi > intervaloBlopi) {
+      if ((nivel == 1 && blopis.size() < 3) || (nivel == 2 && blopis.size() < 6)) {
+        Blopi nuevo = new Blopi(1);
+        blopis.add(nuevo);
+      }
+
+      else if (nivel == 3) {
+        if (blopis.size() < 6) {
+          Blopi nuevo = new Blopi(round(random(1,2)));
+          blopis.add(nuevo);
+        }
+      }
+    }
+  }
 }
 
 void escenario3() {  
