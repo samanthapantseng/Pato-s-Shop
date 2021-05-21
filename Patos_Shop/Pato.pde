@@ -18,7 +18,7 @@ class Pato {
     vel = 0;
     vida = 100;
     puntos = 0;
-//    ataques.clear();
+    //ataques.clear();
   }
   
   int getPuntaje() {
@@ -28,14 +28,14 @@ class Pato {
   
   void dibujar() {
     ang += vel;
-    loc.x = width/2 + cos(radians(ang)) * width/5;
-    loc.y = height/2 + sin(radians(ang)) * width/5;
+    loc.x = width/2 + cos(radians(ang)) * (width/4 - width/50);
+    loc.y = height/2 + sin(radians(ang)) * (width/4 - width/50);
     
     pushMatrix();
     translate(loc.x, loc.y);
     rotate(radians(ang - 90));
     imageMode(CENTER);
-    image(img, 0, 0);
+    image(img, 0, 0, width/20, width/20);
     popMatrix();
     
     for (int x=0; x < ataques.size(); x++) {
@@ -46,17 +46,25 @@ class Pato {
       if (!aux.isPlaying())
         ataques.remove(x);
     }
+    
+    textSize(15);
+    fill(255);
+    textAlign(LEFT);
+    text("Condicion: "+vida+"%", 20,20);
+    
+    textAlign(RIGHT);
+    text("Puntos: "+puntos, width-20, 20);
   }
   
   void disparar () {
-    AtaquePato nuevo = new AtaquePato(ang, 180);
+    AtaquePato nuevo = new AtaquePato(ang, width/4 - width/20);
     ataques.add(nuevo);  
   }
   
-  boolean balaBlopi(PVector posBlopi) {
+  boolean ataque(PVector posUfo) {
     for (int x=0; x < ataques.size(); x++) {
       AtaquePato aux = ataques.get(x);
-      if (aux.getPos().dist(posBlopi) < 15) {
+      if (aux.getPos().dist(posUfo) < width/80) {
         ataques.remove(x);
         puntos+=100;
         return true;
@@ -65,9 +73,9 @@ class Pato {
     return false;
   }
   
-  void quitarVida() {
-    vida -= 20;
-  }
+  void sumarVida(int _vida) {
+    vida += _vida;
+  }  
   
   boolean estaVivo() {
     if (vida > 0)
