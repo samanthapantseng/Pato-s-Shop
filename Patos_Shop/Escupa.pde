@@ -13,7 +13,7 @@ class Escupa {
     angulo = _ang;
     isAlive = true;
     vida = -15;
-    veloc = 2;
+    veloc = 4;
   }
   
   void dibujar() {
@@ -23,7 +23,7 @@ class Escupa {
     translate(position.x, position.y);
     scale(escala);
     rotate(radians(angulo + 90));
-    image(imgEscupa, 0, 0, width/10, width/10);
+    image(imgEscupa, 0, 0, width/20, width/20);
     popMatrix();
   }
   

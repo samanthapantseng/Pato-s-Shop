@@ -2,10 +2,11 @@ import gifAnimation.*;
 PImage[] animation;
 Gif loopingE1;
 Gif loopingE3;
+Gif loopingE4;
 
 import ddf.minim.*;
 Minim minim;
-AudioPlayer mE1, mE2, mE3;
+AudioPlayer mE1, mE2, mE3, mE4;
 AudioSample splash, choqueMosca, explosionMoco;
 
 ArrayList<Moco> mocos;
@@ -51,6 +52,7 @@ void setup() {
   mE1 = minim.loadFile("mE1.mp3");
   mE2 = minim.loadFile("mE2.mp3");
   mE3 = minim.loadFile("mE3.mp3");
+  mE4 = minim.loadFile("mE4.mp3");  
   
   splash = minim.loadSample("splash.mp3");
   explosionMoco = minim.loadSample("explosionMoco.mp3");
@@ -61,6 +63,7 @@ void setup() {
   
   loopingE1 = new Gif(this, "loopingE1.gif");
   loopingE3 = new Gif(this, "loopingE3.gif");
+  loopingE4 = new Gif(this, "loopingE4.gif"); 
   
   instante = millis();
   
@@ -90,6 +93,8 @@ void draw() {
     escenario2();
   else if (escenario == 3)
     escenario3();
+  else if (escenario == 4)
+    escenario4();
 }
 
 void escenario1() {
@@ -122,13 +127,7 @@ void escenario2() {
       choqueMoscas.add(new ChoqueMosca(aux.getPos()));
       pato.sumarVida(aux.getVida());
       moscas.remove(x);
-    }
-    
-    ////if (pato.ataque(aux.getPos())) {
-    ////  //explosionMocos.add(new Explosion(aux.getPos()));
-    ////  if (moscas.size() > 0)
-    ////    moscas.remove(x);
-    ////}    
+    }       
   }
     
   if (millis() - instanteMosca > intervaloMosca) {
@@ -212,12 +211,16 @@ void escenario2() {
     }
         
     if (blop.getVida() == 0) {
-      //escenario de exito, final del juego
+      escenario = 4;
+      mE2.pause();
+      mE2.rewind();
+      mE4.play();
+      mE4.loop(); 
     }
   }
   
   if (pato.getPuntaje() % 300 == 0 && pato.getPuntaje() > 0) {
-    if (cambioNivel == false) {
+    if (cambioNivel == false && nivel < 6) {
       nivel++;
       cambioNivel = true;
       intervaloBlopi -= 400;
@@ -296,6 +299,11 @@ void escenario3() {
   }
 }
 
+void escenario4() {
+  loopingE4.loop();
+  image(loopingE4, width/2, height/2, width, height);
+
+}
 void keyPressed() {    
   if (key == '1') {
     escenario = 1;
@@ -342,7 +350,15 @@ void keyPressed() {
           pato.movI();
       }
     }
-  }   
+  }
+  
+  else if (key == 'a' && escenario == 4) {
+    escenario = 1;
+    mE4.pause();
+    mE4.rewind();
+    mE1.play();
+    mE1.loop();
+  }
 }
 
 void keyReleased() {

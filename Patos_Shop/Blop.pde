@@ -20,7 +20,7 @@ class Blop {
     angRotacion = 90;
     escupas.clear();
     instanteEscupa = millis();
-    intervaloEscupa = 1000;
+    intervaloEscupa = 2500;
   }
   
   void dibujar() {
@@ -39,7 +39,7 @@ class Blop {
   }
     
   void disparar() {
-    if (millis() - instanteEscupa > intervaloEscupa) {
+    if ((millis() - instanteEscupa > intervaloEscupa) && escupas.size() < 12) {
       instanteEscupa = millis();
       if (vida > 15) {
         float angTmp = random(0,360);
@@ -69,7 +69,9 @@ class Blop {
   }
   
   void quitarVida() {
-    vida -= 1;
+    if (vida != 0) {
+      vida -= 1;    
+    }
     intervaloEscupa -= 70;
   }
   
