@@ -6,7 +6,7 @@ Gif loopingE3;
 import ddf.minim.*;
 Minim minim;
 AudioPlayer mE1, mE2, mE3;
-AudioSample splash, choqueMosca, explosionMoco;
+AudioSample splash, choqueMosca, explosionMoco, scambioNivel, comeVida;
 
 ArrayList<Moco> mocos;
 Pato pato;
@@ -39,7 +39,7 @@ long instanteFlor;
 int intervaloFlor;
 
 //blop
-Blop blop;
+//Blop blop;
 
 void setup() {
   fullScreen();  
@@ -55,6 +55,8 @@ void setup() {
   splash = minim.loadSample("splash.mp3");
   explosionMoco = minim.loadSample("explosionMoco.mp3");
   choqueMosca = minim.loadSample("choqueMosca.mp3");
+  scambioNivel = minim.loadSample("scambioNivel.mp3");
+  comeVida = minim.loadSample("comeVida.mp3");
   
   mE1.play();
   mE1.loop();
@@ -75,7 +77,7 @@ void setup() {
   
   flores = new ArrayList<Ufo>();
   pato = new Pato();
-  blop = new Blop();
+  //blop = new Blop();
   
   escenario = 1;
   esperaRestart = 8000;
@@ -147,6 +149,7 @@ void escenario2() {
       //explosiones.add(new Explosion(tmp.getPos()));
       pato.sumarVida(aux.getVida());
       flores.remove(x);
+      comeVida.trigger();
     }
   }
     
@@ -197,34 +200,34 @@ void escenario2() {
   }
   
 
-  else if (nivel == 6) {
-    blop.dibujar();
-    blop.disparar();
+  //else if (nivel == 6) {
+  //  blop.dibujar();
+  //  blop.disparar();
     
-     //if (pato.getPos().dist(aux.getPos()) < width/30) {
-     //   explosionMocos.add(new ExplosionMoco(aux.getPos()));
-     //   pato.sumarVida(aux.getVida());
-     //   blopis.remove(x);      
-     // }
+  //   //if (pato.getPos().dist(aux.getPos()) < width/30) {
+  //   //   explosionMocos.add(new ExplosionMoco(aux.getPos()));
+  //   //   pato.sumarVida(aux.getVida());
+  //   //   blopis.remove(x);      
+  //   // }
     
-    if (blop.choqueEscupa(pato.getPos())) {
-      splashes.add(new Splash(pato.getPos()));
-      pato.sumarVida(blop.getValorVida());
-    }
+  //  if (blop.choqueEscupa(pato.getPos())) {
+  //    splashes.add(new Splash(pato.getPos()));
+  //    pato.sumarVida(blop.getValorVida());
+  //  }
     
-    //if (pato.balaBlopi(new PVector(width/2, height/2))) {
-    //  blop.quitarVida();
-    //  explosionMocos.add(new ExplosionMoco(new PVector(width/2, height/2)));
-    //}
-     if (pato.ataque(.getPos())) {
-        splashes.add(new Splash(aux.getPos()));
-        blop.quitarVida();
-      }
+  //  //if (pato.balaBlopi(new PVector(width/2, height/2))) {
+  //  //  blop.quitarVida();
+  //  //  explosionMocos.add(new ExplosionMoco(new PVector(width/2, height/2)));
+  //  //}
+  //   if (pato.ataque(.getPos())) {
+  //      splashes.add(new Splash(aux.getPos()));
+  //      blop.quitarVida();
+  //    }
     
-    if (blop.getVida() == 0) {
-      //escenario de exito, final del juego
-    }
-  }
+  //  if (blop.getVida() == 0) {
+  //    //escenario de exito, final del juego
+  //  }
+  //}
   
   //for (int x=0; x<explosiones.size(); x++) {
   //  Explosion tmp = explosiones.get(x);
@@ -241,10 +244,11 @@ void escenario2() {
       cambioNivel = true;
       intervaloBlopi -= 400;
       intervaloMosca -= 800;
+      scambioNivel.trigger();
       
-      if (nivel == 6) {
-        blop.reset();
-      }
+      //if (nivel == 6) {
+      //  blop.reset();
+      //}
     }
   }
   else {
