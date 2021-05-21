@@ -16,10 +16,27 @@ int n, espera, esperaRestart, escenario;
 int nivel;
 boolean cambioNivel;
 
+//obstaculos
+ArrayList<Ufo> moscas;
+long instanteMosca;
+int intervaloMosca;
+
+
 //enemigos
-ArrayList<Blopi> blopis;
+ArrayList<Ufo> blopis;
 long instanteBlopi;
 int intervaloBlopi;
+
+//explosiones
+//ArrayList<Explosion> explosiones;
+
+//flores
+ArrayList<Ufo> flores;
+long instanteFlor;
+int intervaloFlor;
+
+//blop
+//Blop blop;
 
 void setup() {
   fullScreen();  
@@ -42,10 +59,12 @@ void setup() {
   
   n = 0;
   mocos = new ArrayList<Moco>();
-  
+  blopis = new ArrayList<Ufo>();
+  moscas = new ArrayList<Ufo>();
+  //explosiones = new ArrayList<Explosion>();
+  flores = new ArrayList<Ufo>();
   pato = new Pato();
-  
-  blopis = new ArrayList<Blopi>();
+  //blop = new Blop();
   
   escenario = 1;
   esperaRestart = 8000;
@@ -68,6 +87,8 @@ void escenario1() {
 }
 
 void escenario2() {  
+  
+  //mocos
   if (millis() - instante > espera && n<150) {
     Moco nuevo = new Moco();
     mocos.add(nuevo);
@@ -80,37 +101,151 @@ void escenario2() {
     tmp.mover();    
   }  
   
-  pato.dibujar();
-  
+  //moscas
+  for (int x=0; x < moscas.size(); x++) {
+    Ufo aux = moscas.get(x);
+    aux.moverRecto();
+    aux.dibujar();
+
+    if (pato.getPos().dist(aux.getPos()) < width/30) {
+      //explosiones.add(new Explosion(tmp.getPos()));
+      pato.sumarVida(aux.getVida());
+      moscas.remove(x);
+    }
+    
+    if (pato.ataque(aux.getPos())) {
+      //explosiones.add(new Explosion(aux.getPos()));
+      if (moscas.size() > 0)
+        moscas.remove(x);
+    }    
+  }
+    
+  if (millis() - instanteMosca > intervaloMosca) {
+    Ufo nuevo = new Ufo(4);
+    moscas.add(nuevo);
+    instanteMosca = millis();
+    
+  } 
+  //flores
+  for (int x=0; x < flores.size(); x++) {
+    Ufo aux = flores.get(x);
+    aux.mover();
+    aux.dibujar();
+
+    if (pato.getPos().dist(aux.getPos()) < width/30) {
+      //explosiones.add(new Explosion(tmp.getPos()));
+      pato.sumarVida(aux.getVida());
+      flores.remove(x);
+    }
+  }
+    
+  if (millis() - instanteFlor > intervaloFlor) {
+    Ufo nuevo = new Ufo(3);
+    flores.add(nuevo);
+    instanteFlor = millis();
+  }
+
   //blopis
   if (nivel < 6) {
     for (int x=0; x < blopis.size(); x++) {
-      Blopi aux = blopis.get(x);
+      Ufo aux = blopis.get(x);
       aux.mover();
       aux.dibujar();
       
-      if (pato.getPos().dist(aux.getPos()) < 30) {
-        // expl
+      if (pato.getPos().dist(aux.getPos()) < width/30) {
+        //explosiones.add(new Explosion(aux.getPos()));
+        pato.sumarVida(aux.getVida());
+        blopis.remove(x);      
+      }
+      
+      if (pato.ataque(aux.getPos())) {
+        //explosiones.add(new Explosion(aux.getPos()));
         if (blopis.size() > 0)
-          blopis.remove(x);      
-      }    
-    }
+          blopis.remove(x);
+      }
+    }      
   
     if (millis() - instanteBlopi > intervaloBlopi) {
-      if ((nivel == 1 && blopis.size() < 3) || (nivel == 2 && blopis.size() < 6)) {
-        Blopi nuevo = new Blopi(1);
+      if ((nivel == 1 && blopis.size() < 5) || (nivel == 2 && blopis.size() < 7)) {
+        Ufo nuevo = new Ufo(1);
         blopis.add(nuevo);
       }
 
-      else if (nivel == 3) {
-        if (blopis.size() < 6) {
-          Blopi nuevo = new Blopi(round(random(1,2)));
-          blopis.add(nuevo);
-        }
+      else if ((nivel == 3 && blopis.size() < 9) || (nivel == 4 && blopis.size() < 11)) {
+        Ufo nuevo = new Ufo(round(random(1,2)));
+        blopis.add(nuevo);        
       }
+      
+      else if (nivel == 5 && blopis.size() < 13) {
+        Ufo nuevo = new Ufo(2);
+        blopis.add(nuevo);        
+      }
+      
+      instanteBlopi = millis();
+    }    
+  }
+  
+  //else if (nivel == 6) {
+  //  blop.dibujar();
+  //  blop.disparar();
+    
+  //  if (blop.balaJefe(pato.getPos())) {
+  //    explosiones.add(new Explosion(pato.getPos()));
+  //    pato.quitarVida();
+  //  }
+    
+  //  if (pato.balaBlopi(new PVector(width/2, height/2))) {
+  //    blop.quitarVida();
+  //    explosiones.add(new Explosion(new PVector(width/2, height/2)));
+  //  }
+    
+  //  if (blop.getVida() == 0) {
+  //    //escenario de exito, final del juego
+  //  }
+  //}
+  
+  //for (int x=0; x<explosiones.size(); x++) {
+  //  Explosion tmp = explosiones.get(x);
+  //  if (tmp.isActive()) {
+  //    tmp.dibujar();
+  //  }
+  //  else
+  //    explosiones.remove(x);
+  //}
+  
+  if (pato.getPuntaje() % 500 == 0 && pato.getPuntaje() > 0) {
+    if (cambioNivel == false) {
+      nivel++;
+      cambioNivel = true;
+      intervaloBlopi -= 400;
+      intervaloMosca -= 800;
+      
+      //if (nivel == 6) {
+      //  blop.reset();
+      //}
     }
   }
-}
+  else {
+    cambioNivel = false;
+  }
+  
+  textSize(15);
+  fill(255);
+  textAlign(CENTER);
+  text("Nivel: "+nivel, width/2,20);
+  
+  if (!pato.estaVivo()) {
+      escenario = 3;
+      mE2.pause();
+      mE2.rewind();
+      mE3.play();
+      mE3.loop();
+      instanteRestart = millis();
+      moscas.clear();
+  }
+  
+  pato.dibujar();
+}  
 
 void escenario3() {  
   loopingE3.loop();
@@ -136,29 +271,41 @@ void keyPressed() {
   else if (key == '2' && escenario == 1) {
     escenario = 2;
     pato.reinicio();
+    
+    instanteBlopi = millis();
+    instanteMosca = millis();
+    instanteFlor = millis();  
+    
+    intervaloBlopi = 4000;
+    intervaloMosca = 10000;
+    intervaloFlor = 35000;
+    
+    blopis.clear();
+    moscas.clear();
+    flores.clear();
+    
+    nivel = 1;
+    cambioNivel = false;
+    
     mE1.pause();
     mE1.rewind();
     mE2.play();
     mE2.loop();
   }
   
-  else if (key == '3' && escenario == 2) {
-    escenario = 3;
-    mE2.pause();
-    mE2.rewind();
-    mE3.play();
-    mE3.loop();
-    instanteRestart = millis();
-  }   
-
-  else if (key == CODED){
-    if (keyCode == RIGHT) {
-      pato.movD();
+  else if (escenario == 2) {
+    if (key == ' ') {
+      pato.disparar();
     }
-    else if (keyCode == LEFT) {
-      pato.movI();
-    }  
-  }
+    if (key == CODED) {
+      if (keyCode == RIGHT) {
+          pato.movD();
+      }
+      else if (keyCode == LEFT) {
+          pato.movI();
+      }
+    }
+  }   
 }
 
 void keyReleased() {
