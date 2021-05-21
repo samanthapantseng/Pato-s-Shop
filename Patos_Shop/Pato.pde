@@ -18,7 +18,6 @@ class Pato {
     vel = 0;
     vida = 100;
     puntos = 0;
-    ataques.clear();
   }
   
   int getPuntaje() {
