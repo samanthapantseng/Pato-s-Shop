@@ -16,7 +16,7 @@ class Blop {
   }
   
   void reset() {
-    vida = 30;
+    vida = 25;
     angRotacion = 90;
     escupas.clear();
     instanteEscupa = millis();
@@ -26,12 +26,7 @@ class Blop {
   void dibujar() {
     imageMode(CENTER);
     image(imageBlop, width/2, height/2);
-    //pushMatrix();
-    //translate(width/2, height/2);
-    //rotate(radians(angRotacion));
-    //image(img,0,0);
-    //popMatrix();
-    
+
     //dibuja las escupas
     for (int x=0; x<escupas.size(); x++) {
       Escupa aux = escupas.get(x);
@@ -42,14 +37,7 @@ class Blop {
         escupas.remove(x);
     }
   }
-  
-  void mover() {
-    //loc.x = width/2 + cos(radians(angulo)) * radio;
-    //loc.y = height/2 + sin(radians(angulo)) * radio;
     
-    //angRotacion += 0.5;
-  }
-  
   void disparar() {
     if (millis() - instanteEscupa > intervaloEscupa) {
       instanteEscupa = millis();

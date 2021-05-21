@@ -201,41 +201,22 @@ void escenario2() {
     blop.dibujar();
     blop.disparar();
     
-     //if (pato.getPos().dist(aux.getPos()) < width/30) {
-     //   explosionMocos.add(new ExplosionMoco(aux.getPos()));
-     //   pato.sumarVida(aux.getVida());
-     //   blopis.remove(x);      
-     // }
-    
     if (blop.choqueEscupa(pato.getPos())) {
       splashes.add(new Splash(pato.getPos()));
       pato.sumarVida(blop.getValorVida());
     }
     
-    //if (pato.balaBlopi(new PVector(width/2, height/2))) {
-    //  blop.quitarVida();
-    //  explosionMocos.add(new ExplosionMoco(new PVector(width/2, height/2)));
-    //}
-     if (pato.ataque(.getPos())) {
-        splashes.add(new Splash(aux.getPos()));
-        blop.quitarVida();
-      }
-    
+    if (pato.ataque(new PVector(width/2, height/2))) {
+      blop.quitarVida();
+      explosionMocos.add(new ExplosionMoco(new PVector(width/2, height/2)));
+    }
+        
     if (blop.getVida() == 0) {
       //escenario de exito, final del juego
     }
   }
   
-  //for (int x=0; x<explosiones.size(); x++) {
-  //  Explosion tmp = explosiones.get(x);
-  //  if (tmp.isActive()) {
-  //    tmp.dibujar();
-  //  }
-  //  else
-  //    explosiones.remove(x);
-  //}
-  
-  if (pato.getPuntaje() % 500 == 0 && pato.getPuntaje() > 0) {
+  if (pato.getPuntaje() % 300 == 0 && pato.getPuntaje() > 0) {
     if (cambioNivel == false) {
       nivel++;
       cambioNivel = true;

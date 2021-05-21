@@ -9,13 +9,11 @@ class Escupa {
   public Escupa(float _ang) {
     imgEscupa = loadImage("escupa.png");
     position = new PVector(width/2, height/2);
-    //radio = _rad;
-    veloc = random(-1, 1);
-    
+    radio = 0;    
     angulo = _ang;
     isAlive = true;
     vida = -15;
-     
+    veloc = 2;
   }
   
   void dibujar() {
@@ -35,12 +33,10 @@ class Escupa {
     position.x = width/2 + cos(radians(angulo)) * radio;
     position.y = height/2 + sin(radians(angulo)) * radio;
     
-    radio +=veloc;
+    radio += veloc;
     
     if (position.x < 0 || position.y > width || position.y < 0 || position.y > height) {
-      isAlive = false;
-      //position.set(width/2, height/2);
-      //radio = 0;  
+      isAlive = false; 
     }  
   }
   
