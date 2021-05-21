@@ -6,6 +6,7 @@ Gif loopingE3;
 import ddf.minim.*;
 Minim minim;
 AudioPlayer mE1, mE2, mE3;
+AudioSample splash, choqueMosca, explosionMoco;
 
 ArrayList<Moco> mocos;
 Pato pato;
@@ -28,7 +29,9 @@ long instanteBlopi;
 int intervaloBlopi;
 
 //explosiones
-//ArrayList<Explosion> explosiones;
+ArrayList<ExplosionMoco> explosionMocos;
+ArrayList<ChoqueMosca> choqueMoscas;
+ArrayList<Splash> splashes;
 
 //flores
 ArrayList<Ufo> flores;
@@ -49,6 +52,10 @@ void setup() {
   mE2 = minim.loadFile("mE2.mp3");
   mE3 = minim.loadFile("mE3.mp3");
   
+  splash = minim.loadSample("splash.mp3");
+  explosionMoco = minim.loadSample("explosionMoco.mp3");
+  choqueMosca = minim.loadSample("choqueMosca.mp3");
+  
   mE1.play();
   mE1.loop();
   
@@ -61,7 +68,11 @@ void setup() {
   mocos = new ArrayList<Moco>();
   blopis = new ArrayList<Ufo>();
   moscas = new ArrayList<Ufo>();
-  //explosiones = new ArrayList<Explosion>();
+  
+  explosionMocos = new ArrayList<ExplosionMoco>();
+  choqueMoscas = new ArrayList<ChoqueMosca>();
+  splashes = new ArrayList<Splash>();
+  
   flores = new ArrayList<Ufo>();
   pato = new Pato();
   //blop = new Blop();
@@ -107,17 +118,17 @@ void escenario2() {
     aux.moverRecto();
     aux.dibujar();
 
-    if (pato.getPos().dist(aux.getPos()) < width/30) {
-      //explosiones.add(new Explosion(tmp.getPos()));
-      pato.sumarVida(aux.getVida());
-      moscas.remove(x);
-    }
+    //if (pato.getPos().dist(aux.getPos()) < width/30) {
+    //  //choqueMosca.add(new ChoqueMosca(tmp.getPos()));
+    //  pato.sumarVida(aux.getVida());
+    //  moscas.remove(x);
+    //}
     
-    if (pato.ataque(aux.getPos())) {
-      //explosiones.add(new Explosion(aux.getPos()));
-      if (moscas.size() > 0)
-        moscas.remove(x);
-    }    
+    ////if (pato.ataque(aux.getPos())) {
+    ////  //explosionMocos.add(new Explosion(aux.getPos()));
+    ////  if (moscas.size() > 0)
+    ////    moscas.remove(x);
+    ////}    
   }
     
   if (millis() - instanteMosca > intervaloMosca) {
@@ -153,13 +164,13 @@ void escenario2() {
       aux.dibujar();
       
       if (pato.getPos().dist(aux.getPos()) < width/30) {
-        //explosiones.add(new Explosion(aux.getPos()));
+        explosionMocos.add(new ExplosionMoco(aux.getPos()));
         pato.sumarVida(aux.getVida());
         blopis.remove(x);      
       }
       
       if (pato.ataque(aux.getPos())) {
-        //explosiones.add(new Explosion(aux.getPos()));
+        splashes.add(new Splash(aux.getPos()));
         if (blopis.size() > 0)
           blopis.remove(x);
       }
@@ -185,6 +196,16 @@ void escenario2() {
     }    
   }
   
+  // dibujar explosiones MOCO
+  for (int x=0; x<explosionMocos.size(); x++) {
+    ExplosionMoco tmp = explosionMocos.get(x);
+    if (tmp.isActive()) {
+      tmp.dibujar();
+      explosionMoco.trigger();
+    }
+    else
+      explosionMocos.remove(x);
+  }
   //else if (nivel == 6) {
   //  blop.dibujar();
   //  blop.disparar();

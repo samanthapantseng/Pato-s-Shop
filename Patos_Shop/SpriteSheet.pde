@@ -20,7 +20,7 @@ class SpriteSheet {
 
     for (int i = 0; i < imageCount; i++) {
       // Use nf() to number format 'i' into four digits
-      String filename = imagePrefix + nf(i, 2) + "."+imageFormat;
+      String filename = imagePrefix + nf(i, 5) + "."+imageFormat;
       images[i] = loadImage(filename);
     }
   }
@@ -62,7 +62,7 @@ class SpriteSheet {
         }
       }
     }
-    image(images[frame], xpos, ypos);
+    image(images[frame], xpos, ypos, width/5, width/5);
   }
   
   void reverse() {

@@ -5,7 +5,7 @@ class ExplosionMoco {
   boolean active;
   
   public ExplosionMoco(PVector _position) {
-    olorMoco = new SpriteSheet("explosion/", 26, "png");
+    olorMoco = new SpriteSheet("olorMoco_", 7, "png");
     position = _position;
     active = true;
     olorMoco.noLoop();
