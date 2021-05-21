@@ -39,7 +39,7 @@ long instanteFlor;
 int intervaloFlor;
 
 //blop
-//Blop blop;
+Blop blop;
 
 void setup() {
   fullScreen();  
@@ -75,7 +75,7 @@ void setup() {
   
   flores = new ArrayList<Ufo>();
   pato = new Pato();
-  //blop = new Blop();
+  blop = new Blop();
   
   escenario = 1;
   esperaRestart = 8000;
@@ -118,11 +118,11 @@ void escenario2() {
     aux.moverRecto();
     aux.dibujar();
 
-    //if (pato.getPos().dist(aux.getPos()) < width/30) {
-    //  //choqueMosca.add(new ChoqueMosca(tmp.getPos()));
-    //  pato.sumarVida(aux.getVida());
-    //  moscas.remove(x);
-    //}
+    if (pato.getPos().dist(aux.getPos()) < width/30) {
+      choqueMoscas.add(new ChoqueMosca(aux.getPos()));
+      pato.sumarVida(aux.getVida());
+      moscas.remove(x);
+    }
     
     ////if (pato.ataque(aux.getPos())) {
     ////  //explosionMocos.add(new Explosion(aux.getPos()));
@@ -196,34 +196,35 @@ void escenario2() {
     }    
   }
   
-  // dibujar explosiones MOCO
-  for (int x=0; x<explosionMocos.size(); x++) {
-    ExplosionMoco tmp = explosionMocos.get(x);
-    if (tmp.isActive()) {
-      tmp.dibujar();
-      explosionMoco.trigger();
+
+  else if (nivel == 6) {
+    blop.dibujar();
+    blop.disparar();
+    
+     //if (pato.getPos().dist(aux.getPos()) < width/30) {
+     //   explosionMocos.add(new ExplosionMoco(aux.getPos()));
+     //   pato.sumarVida(aux.getVida());
+     //   blopis.remove(x);      
+     // }
+    
+    if (blop.choqueEscupa(pato.getPos())) {
+      splashes.add(new Splash(pato.getPos()));
+      pato.sumarVida(blop.getValorVida());
     }
-    else
-      explosionMocos.remove(x);
+    
+    //if (pato.balaBlopi(new PVector(width/2, height/2))) {
+    //  blop.quitarVida();
+    //  explosionMocos.add(new ExplosionMoco(new PVector(width/2, height/2)));
+    //}
+     if (pato.ataque(.getPos())) {
+        splashes.add(new Splash(aux.getPos()));
+        blop.quitarVida();
+      }
+    
+    if (blop.getVida() == 0) {
+      //escenario de exito, final del juego
+    }
   }
-  //else if (nivel == 6) {
-  //  blop.dibujar();
-  //  blop.disparar();
-    
-  //  if (blop.balaJefe(pato.getPos())) {
-  //    explosiones.add(new Explosion(pato.getPos()));
-  //    pato.quitarVida();
-  //  }
-    
-  //  if (pato.balaBlopi(new PVector(width/2, height/2))) {
-  //    blop.quitarVida();
-  //    explosiones.add(new Explosion(new PVector(width/2, height/2)));
-  //  }
-    
-  //  if (blop.getVida() == 0) {
-  //    //escenario de exito, final del juego
-  //  }
-  //}
   
   //for (int x=0; x<explosiones.size(); x++) {
   //  Explosion tmp = explosiones.get(x);
@@ -241,9 +242,9 @@ void escenario2() {
       intervaloBlopi -= 400;
       intervaloMosca -= 800;
       
-      //if (nivel == 6) {
-      //  blop.reset();
-      //}
+      if (nivel == 6) {
+        blop.reset();
+      }
     }
   }
   else {
@@ -266,6 +267,40 @@ void escenario2() {
   }
   
   pato.dibujar();
+  
+    // dibujar explosiones MOCO
+  for (int x=0; x<explosionMocos.size(); x++) {
+    ExplosionMoco tmp = explosionMocos.get(x);
+    if (tmp.isActive()) {
+      tmp.dibujar();
+      explosionMoco.trigger();
+    }
+    else
+      explosionMocos.remove(x);
+  }
+  
+   // dibujar Splash    
+  for (int x=0; x<splashes.size(); x++) {
+    Splash tmp = splashes.get(x);
+    if (tmp.isActive()) {
+      tmp.dibujar();
+      splash.trigger();
+    }
+    else
+      splashes.remove(x);
+  }
+  
+    // dibujar explosiones moscas
+     
+  for (int x=0; x<choqueMoscas.size(); x++) {
+    ChoqueMosca tmp = choqueMoscas.get(x);
+    if (tmp.isActive()) {
+      tmp.dibujar();
+      choqueMosca.trigger();
+    }
+    else
+      choqueMoscas.remove(x);
+  }
 }  
 
 void escenario3() {  
