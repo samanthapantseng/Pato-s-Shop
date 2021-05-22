@@ -7,7 +7,7 @@ Gif loopingE4;
 import ddf.minim.*;
 Minim minim;
 AudioPlayer mE1, mE2, mE3, mE4;
-AudioSample splash, choqueMosca, explosionMoco;
+AudioSample sfxSplash, sfxMosca, sfxMoco, sfxFlor, sfxNivel;
 
 ArrayList<Moco> mocos;
 Pato pato;
@@ -39,6 +39,8 @@ ArrayList<Ufo> flores;
 long instanteFlor;
 int intervaloFlor;
 
+PFont font;
+
 //blop
 Blop blop;
 
@@ -54,9 +56,11 @@ void setup() {
   mE3 = minim.loadFile("mE3.mp3");
   mE4 = minim.loadFile("mE4.mp3");  
   
-  splash = minim.loadSample("splash.mp3");
-  explosionMoco = minim.loadSample("explosionMoco.mp3");
-  choqueMosca = minim.loadSample("choqueMosca.mp3");
+  sfxSplash = minim.loadSample("sfxSplash.mp3");
+  sfxMoco = minim.loadSample("sfxMoco.mp3");
+  sfxMosca = minim.loadSample("sfxMosca.mp3");
+  sfxFlor = minim.loadSample("sfxFlor.mp3");
+  sfxNivel = minim.loadSample("sfxNivel.mp3");
   
   mE1.play();
   mE1.loop();
@@ -82,6 +86,9 @@ void setup() {
   
   escenario = 1;
   esperaRestart = 8000;
+  
+  font = createFont("patotype.ttf", width/50);
+  textFont(font);
 }
 
 void draw() {
@@ -125,6 +132,7 @@ void escenario2() {
 
     if (pato.getPos().dist(aux.getPos()) < width/30) {
       choqueMoscas.add(new ChoqueMosca(aux.getPos()));
+      sfxMosca.trigger();      
       pato.sumarVida(aux.getVida());
       moscas.remove(x);
     }       
@@ -132,7 +140,7 @@ void escenario2() {
     
   if (millis() - instanteMosca > intervaloMosca) {
     Ufo nuevo = new Ufo(4);
-    moscas.add(nuevo);
+    moscas.add(nuevo);   
     instanteMosca = millis();
     
   } 
@@ -143,7 +151,7 @@ void escenario2() {
     aux.dibujar();
 
     if (pato.getPos().dist(aux.getPos()) < width/30) {
-      //explosiones.add(new Explosion(tmp.getPos()));
+      sfxFlor.trigger();
       pato.sumarVida(aux.getVida());
       flores.remove(x);
     }
@@ -164,12 +172,14 @@ void escenario2() {
       
       if (pato.getPos().dist(aux.getPos()) < width/30) {
         explosionMocos.add(new ExplosionMoco(aux.getPos()));
+        sfxMoco.trigger();        
         pato.sumarVida(aux.getVida());
         blopis.remove(x);      
       }
       
       if (pato.ataque(aux.getPos())) {
         splashes.add(new Splash(aux.getPos()));
+        sfxSplash.trigger();        
         if (blopis.size() > 0)
           blopis.remove(x);
       }
@@ -202,12 +212,14 @@ void escenario2() {
     
     if (blop.choqueEscupa(pato.getPos())) {
       splashes.add(new Splash(pato.getPos()));
+      sfxSplash.trigger();      
       pato.sumarVida(blop.getValorVida());
     }
     
     if (pato.ataque(new PVector(width/2, height/2))) {
       blop.quitarVida();
       explosionMocos.add(new ExplosionMoco(new PVector(width/2, height/2)));
+      sfxMoco.trigger();    
     }
         
     if (blop.getVida() == 0) {
@@ -222,6 +234,7 @@ void escenario2() {
   if (pato.getPuntaje() % 300 == 0 && pato.getPuntaje() > 0) {
     if (cambioNivel == false && nivel < 6) {
       nivel++;
+      sfxNivel.trigger();
       cambioNivel = true;
       intervaloBlopi -= 400;
       intervaloMosca -= 800;
@@ -235,10 +248,10 @@ void escenario2() {
     cambioNivel = false;
   }
   
-  textSize(15);
-  fill(255);
-  textAlign(CENTER);
-  text("Nivel: "+nivel, width/2,20);
+  textSize(width/40);
+  fill(#62b537);
+  textAlign(LEFT);
+  text("STAGE "+nivel, width/25, height/2);
   
   if (!pato.estaVivo()) {
       escenario = 3;
@@ -257,7 +270,6 @@ void escenario2() {
     ExplosionMoco tmp = explosionMocos.get(x);
     if (tmp.isActive()) {
       tmp.dibujar();
-      explosionMoco.trigger();
     }
     else
       explosionMocos.remove(x);
@@ -268,7 +280,6 @@ void escenario2() {
     Splash tmp = splashes.get(x);
     if (tmp.isActive()) {
       tmp.dibujar();
-      splash.trigger();
     }
     else
       splashes.remove(x);
@@ -280,7 +291,6 @@ void escenario2() {
     ChoqueMosca tmp = choqueMoscas.get(x);
     if (tmp.isActive()) {
       tmp.dibujar();
-      choqueMosca.trigger();
     }
     else
       choqueMoscas.remove(x);
