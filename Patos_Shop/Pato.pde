@@ -18,7 +18,6 @@ class Pato {
     vel = 0;
     vida = 100;
     puntos = 0;
-    ataques.clear();
   }
   
   int getPuntaje() {
@@ -47,13 +46,11 @@ class Pato {
         ataques.remove(x);
     }
     
-    textSize(15);
-    fill(255);
-    textAlign(LEFT);
-    text("Condicion: "+vida+"%", 20,20);
-    
+    textSize(width/70);
+    fill(#ee8d00);
     textAlign(RIGHT);
-    text("Puntos: "+puntos, width-20, 20);
+    text(""+vida+"% HEALTH", width - width/25, height/2 - height/32);
+    text(""+puntos+" SCORE", width - width/25, height/2 + height/32);
   }
   
   void disparar () {
